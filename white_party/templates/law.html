@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+            <h1 class="text-white d-inline-block mb-0 mr-3"><span class="fas fa-balance-scale"></span>&nbsp; Law</h1>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.discussion') }}"><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Law</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Card stats -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 status" id="law-change">
+                            <span class="category law-category h4">Law</span>
+                            {% if moderator == "yes" %}
+                                <button type="button" name="button" class="btn btn-sm btn-default float-right fas fa-trash" id="delete-law"></button>
+                                <button type="button" name="button" class="btn btn-sm btn-default float-right fas fa-pen-alt" id="update-law"></button>
+                                <button type="button" name="button" class="btn btn-sm btn-default float-right fas fa-language" id="translate-law"></button>
+                            {% else %}
+                                <div class="col-auto title-icons-wrapper mr-xl-2">
+                                    <div class="title-icon">
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u=127.0.0.1{{ request.path }}" target="_blank" rel="noopener nofollow">
+                                            <i class="fab fa-facebook-f fa-facebook-color"></i>
+                                        </a>
+                                    </div>
+                                    <div class="title-icon">
+                                        <a href="https://twitter.com/share?text=Check this law. meta_data[0]['content'] &url=127.0.0.1{{ request.path }}" target="_blank" rel="noopener nofollow">
+                                            <i class="fab fa-twitter fa-twitter-color"></i>
+                                        </a>
+                                    </div>
+                                    <div class="title-icon">
+                                        <a href="https://api.whatsapp.com/send?text=meta_data[0]['content'] http://127.0.0.1{{ request.path }}" target="_blank" rel="noopener nofollow">
+                                            <i class="fab fa-whatsapp fa-whatsapp-color"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 mt-2">
+                            <h2 class="h2 font-weight-bold m-3">{{ law.title }}</h2>
+                            <div class="m-2">{{ law.info }}</div>
+                        </div>
+                        <div class="col-12 my-2">
+                            <h2 class="h2 font-weight-bold m-3">Explanation</h2>
+                            <div class="m-2">{{ law.explanation }}</div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <h2 class="h2 font-weight-bold m-3">Info</h2>
+                            {% set state = get_status(law) %}
+                            <div class="m-2">{{ state[1] }}. {{ state[3] }}</div>
+                        </div>
+
+                        <div class="col-12 custom-card-footer">
+                            <hr>
+                            <div class="text-muted">
+                                <span class="author">{{ law.author.user_name }}</span>
+                                <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="all-proposals">
+        {% for proposal in proposals_paginate.items %}
+            <div class="col-xl-4 col-md-6 col-12">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="status">
+                                    <h4 class="category proposal-category">Proposal</h4>
+                                </div>
+                                <a class="h2 font-weight-bold m-3 p-0 d-inline-flex col-12" href="{{ url_for('proposals.edit_proposal', law_id=law.id, proposal_id=proposal.id) }}">{{ proposal.title }}</a>
+                                <div class="mb-3">{{ proposal.info }}</div>
+                            </div>
+
+                            <div class="col-4" style="display: flex;">
+                                {% if logged_user %}
+                                    {% if logged_user in proposal.voters %}
+                                        <div class="fas fa-check icon icon-shape bg-gradient-check text-white rounded-circle m-auto voted-in" proposal-id="{{ proposal.id }}" voted="yes"></div>
+                                    {% else %}
+                                        <div class="fas fa-check icon icon-shape bg-gradient-check text-white rounded-circle m-auto" proposal-id="{{ proposal.id }}" voted="no"></div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="fas fa-check icon icon-shape bg-gradient-check text-white rounded-circle m-auto" proposal-id="{{ proposal.id }}" voted="cant"></div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-8">
+                                <div class="score-wrapper">
+                                    <span class="score" id="vote-num-{{ proposal.id }}">{{ proposal.up_votes }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 custom-card-footer">
+                                <hr>
+                                <div class="text-muted">
+                                    <span class="author">{{ proposal.author.user_name }}</span>
+                                    <span class="date">{{ proposal.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if proposals_paginate.pages > 1 %}
+            <div class="col-12 my-3">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% for page_num in proposals_paginate.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == proposals_paginate.page %}
+                                    <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('laws.law', _id_=law.id)}}?proposals_page={{ page_num }}">{{ page_num }}</a></li>
+                                {% endif %}
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-12 py-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0"><span class="fas fa-pencil-ruler"></span> &nbsp; Add Edit Proposal </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="#" method="post">
+                        {{ proposal_form.hidden_tag() }}
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{ proposal_form.title.label(class="form-control-label") }}
+                                {{ proposal_form.title(class="form-control", **{'placeholder': "Title..."} ) }}
+                            </div>
+                            <div class="form-group">
+                                {{ proposal_form.info.label(class="form-control-label") }}
+                                {{ proposal_form.info(class="form-control", **{'data-gramm_editor': "false", 'placeholder': "Brief Summary...", 'rows': "4"}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ proposal_form.explanation.label(class="form-control-label") }}
+                                {{ proposal_form.explanation(class="form-control", **{'data-gramm_editor': "false", 'placeholder': "Brief Summary...", 'rows': "4"}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ proposal_form.submit(class="btn btn-default p-2") }}
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+  document.getElementById('all-proposals').addEventListener('click', function(event) {
+    vote(event.target);
+  }, true);
+
+  function vote(element){
+    var proposal_id = element.getAttribute('proposal-id');
+    if (proposal_id != null){
+      var vote_num_element = document.getElementById('vote-num-' + proposal_id);
+      var voted = element.getAttribute('voted');
+
+      if (voted == "yes"){
+        vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) - 1;
+        element.setAttribute('voted', 'no');
+        element.classList.remove('voted-in');
+      }
+      else if (voted == "no") {
+        vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) + 1;
+        element.setAttribute('voted', 'yes');
+        element.classList.add('voted-in');
+      }
+
+      var csrf_token = "{{ csrf_token() }}";
+      var xhr = new XMLHttpRequest();
+      data = JSON.stringify({
+        'proposal_id': proposal_id
+      });
+
+      xhr.open("POST", "{{ url_for('proposals.vote') }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.send(data);
+      xhr.onreadystatechange = function () {
+        if(xhr.responseText == "{{ url_for('users.login') }}"){
+          window.location.href = "{{ url_for('users.login') }}";
+        }
+      }
+
+    }
+  }
+
+</script>
+<script type="text/javascript">
+  base_element = document.getElementById('law-change');
+  if (base_element != null){
+    base_element.addEventListener('click', function(event) {
+      change_law(event.target);
+    });
+  }
+
+  function change_law(button){
+    var csrf_token = "{{ csrf_token() }}";
+
+    if (button.getAttribute('id') == "delete-law"){
+      var xhr = new XMLHttpRequest();
+      data = JSON.stringify({
+        'law_id': "{{ law.id }}"
+      });
+
+      xhr.open("POST", "{{ url_for('laws.delete') }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.send(data);
+
+      xhr.onreadystatechange = function () {
+        if(xhr.responseText == "{{ url_for('users.login') }}"){
+          window.location.href = "{{ url_for('users.login') }}";
+
+        }
+        else if(xhr.responseText == "200"){
+          window.location.href = "{{ url_for('main.index') }}"
+        }
+        else if (xhr.responseText){
+          alert(xhr.responseText);
+        }
+      }
+    }
+
+    else if(button.getAttribute('id') == "update-law"){
+      window.location.href = "{{ url_for('laws.edit_law', _id_=law.id) }}";
+    }
+
+    else if(button.getAttribute('id') == "translate-law"){
+      window.location.href = "{{ url_for('laws.translate_law', _id_=law.id) }}";
+    }
+  }
+</script>
+{% endblock %}

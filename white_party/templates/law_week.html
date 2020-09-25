@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<style media="screen">
+    .week_duels{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container-fluid">
+     <!-- Card stats -->
+    <div class="row">
+
+        <div class="col-12 my-3" style="display: flex;">
+            <h1 class="text-white d-inline-block mb-0  mr-3" style="align-self: center;">Week Duel {{ week_duel }}</h1>
+
+            <div class="archive-search">
+              <form>
+                <input type="text" name="search-bar" id="search-text" placeholder="**">
+                <button type="button" name="button" id="search-button">
+                  <span class="fas fa-search" aria-hidden="true"></span>
+                </button>
+              </form>
+            </div>
+            
+        </div>
+
+        {% for law in laws%}
+
+            <div class="col-12 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="status">
+                                    <span class="category law-category h4">Law</span>
+                                    {% set state = get_status(law) %}
+                                    <span class="state h4 {{ state[0] }}">{{ state[1] }}</span>
+                                </div>
+
+                                <a href="{{ url_for('laws.law', _id_=law.id) }}" class="h2 font-weight-bold my-3 title">{{ law.title }}</a>
+                                <div class="m-3">{{ law.info }}</div>
+                                <h5 class="text-muted"></h5>
+                            </div>
+
+                            <div class="col-12 custom-card-footer">
+                                <hr>
+                                <div class="text-muted">
+                                    <span class="author">{{ law.author.user_name }}</span>
+                                    <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+
+
+        {% if has_prev or has_next %}
+            <div class="col-12 my-3">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('main.archive', week_duel_num=week_duel - 1) }}" tabindex="-1">
+                                    <i class="fa fa-angle-left"></i>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active"><span class="page-link">{{ week_duel }}</span></li>
+
+                        {% if has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('main.archive', week_duel_num=week_duel + 1) }}">
+                                    <i class="fa fa-angle-right"></i>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<script type="text/javascript">
+  document.getElementById('search-button').addEventListener('click', function(event) {
+    redirect();
+  });
+
+  function redirect(){
+    var search_text = document.getElementById('search-text').value;
+    window.location.href = "/archive/" + search_text;
+  }
+</script>
+{% endblock %}

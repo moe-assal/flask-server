@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% if user_profile == "true" %}
+<style media="screen">
+    .profile{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+{% endif %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 py-6">
+            <div class="card card-profile">
+                <div class="card-img-top">
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-3 order-lg-2">
+                        <div class="card-profile-image">
+                            <a href="#">
+                                <img src="{{ user.profile_image_url() }}" class="rounded-circle">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                    <div class="d-flex" id="follow-ship">
+                        {% if not user_profile == "true" %}
+                            {% if followed == "true" %}
+                                <button class="btn btn-sm btn-info mr-auto" action="unfollow">unfollow</button>
+                            {% elif followed == "false" %}
+                                <button class="btn btn-sm btn-info mr-auto" action="follow">follow</button>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url_for('users.edit_profile') }}" class="btn btn-sm btn-default float-right">Edit Profile</a>
+                        {% endif %}
+
+                        {% if moderator == "yes" %}
+                            {% if volunteered(user) %}
+                                <button class="btn btn-sm btn-default float-right" type="button" name="button" id='volunteer' action="remove">Remove Volunteer</button>
+                            {% else %}
+                                <button class="btn btn-sm btn-default float-right" type="button" name="button" id='volunteer' action="add">Add Volunteer</button>
+                            {% endif %}
+                            <button class="btn btn-sm btn-default float-right" type="button" name="button" id='delete-profile'>Delete Profile</button>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-profile-stats d-flex justify-content-center">
+                                <div>
+                                    <span class="heading">{{ user.followed.count() }}</span>
+                                    <span class="description">Following</span>
+                                </div>
+                                <div>
+                                    <span class="heading">{{ user.followers.count() }}</span>
+                                    <span class="description">Followers</span>
+                                </div>
+                                <div>
+                                    <span class="heading">{{ user.laws_.__len__() + user.edit_proposals.__len__() + user.comments.__len__() }}</span>
+                                    <span class="description">Posts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h5 class="h3">{{ user.user_name }}<span class="font-weight-light">, {{ user.user_age() }}</span></h5>
+                        <div class="h5 font-weight-300">
+                            <i class="fas fa-map mr-2"></i>{{ user.user_location() }}
+                        </div>
+                        <div class="h5 mt-4">
+                            <i class="fas fa-fighter-jet mr-2"></i>Joined at {{ user.date_joined.strftime("%b %Y") }} - {{ user.membership_id }}
+                        </div>
+                        <div>
+                            {{ user.description }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <h1 class="text-white col-12 pl-3"><span class="fas fa-balance-scale" aria-hidden="true"></span>&nbsp; Latest Laws</h1>
+        <hr class="white-hr mt-2 mb-4">
+        {% if laws_paginate.items.__len__() != 0 %}
+            {% for law in laws_paginate.items %}
+                <div class="col-md-6 col-12">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-12 status">
+                                    <span class="category law-category h4">Law</span>
+                                    <span class="state h4 discuss-state">Under Discussion</span>
+                                </div>
+
+                                <div class="col-12 my-2">
+                                    <a class="h2 font-weight-bold p-2 title" href="{{ url_for('laws.law', _id_=law.id) }}">{{ law.title }}</a>
+                                    <span class="m-3">{{ law.info }}</span>
+                                </div>
+
+                                <div class="col-12 custom-card-footer">
+                                    <hr>
+                                    <div class="text-muted">
+                                        <span class="author">{{ law.author.user_name }}</span>
+                                        <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+
+            {% if laws_paginate.pages > 1 %}
+                <div class="col-12 my-2 pb-2">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            {% for page_num in laws_paginate.iter_pages() %}
+                                {% if page_num %}
+                                    {% if page_num == laws_paginate.page %}
+                                        <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="{{ url_for('users.profile', user_id=user.id)}}?law_page={{ page_num }}&proposal_page={{ proposals_paginate.page }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+
+
+        {% else %}
+            <h2 class="text-white m-auto p-4">No activity to show :(</h2>
+        {% endif %}
+
+
+
+        <h1 class="text-white col-12 pl-3"><span class="fas fa-drafting-compass" aria-hidden="true"></span>&nbsp; Latest Edit Proposals</h1>
+        <hr class="white-hr mt-2 mb-4">
+        {% if proposals_paginate.items.__len__() != 0 %}
+            {% for proposal in proposals_paginate.items %}
+                <div class="col-md-6 col-12">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-12 status">
+                                    <span class="category proposal-category h4">Proposal</span>
+                                </div>
+
+                                <div class="col-12 my-2">
+                                    <a class="h2 font-weight-bold p-2 title" href="{{ url_for('proposals.edit_proposal', law_id=proposal.posted_at.id, proposal_id=proposal.id) }}">{{ proposal.title }}</a>
+                                    <span class="m-3">{{ proposal.info }}</span>
+                                </div>
+
+                                <div class="col-12 custom-card-footer">
+                                    <hr>
+                                    <div class="text-muted">
+                                        <span class="author">{{ proposal.author.user_name }}</span>
+                                        <span class="date">{{ proposal.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if proposals_paginate.pages > 1 %}
+                <div class="col-12 my-3">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            {% for page_num in proposals_paginate.iter_pages() %}
+                                {% if page_num %}
+                                    {% if page_num == proposals_paginate.page %}
+                                        <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="{{ url_for('users.profile', user_id=user.id)}}?law_page={{ laws_paginate.page }}&proposal_page={{ page_num }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+
+
+        {% else %}
+            <h2 class="text-white m-auto p-4">No activity to show :(</h2>
+        {% endif %}
+
+    </div>
+</div>
+
+<script type="text/javascript">
+  var base_element = document.getElementById('follow-ship')
+  if (base_element != null){ // not logged_user profile
+    base_element.addEventListener('click', function(event) {
+      follow(event.target);
+    });
+  }
+
+  function follow(element){
+    var action = element.getAttribute('action');
+    if (action != null){
+
+      if (action == "follow"){
+        element.innerHTML = "unfollow";
+        element.setAttribute('action', 'unfollow');
+      }
+      else if (action == "unfollow"){
+        element.innerHTML = "follow";
+        element.setAttribute('action', 'follow');
+      }
+      else{
+        return;
+      }
+
+      var csrf_token = "{{ csrf_token() }}";
+      var xhr = new XMLHttpRequest();
+      data = JSON.stringify({
+        'action': action
+      });
+
+      xhr.open("POST", "{{ url_for('users.profile', user_id=user.id) }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.send(data);
+
+    }
+  }
+
+</script>
+
+<script type="text/javascript">
+  delete_button = document.getElementById('delete-profile')
+  if (delete_button != null){ // not a moderator
+    delete_button.addEventListener('click', function(event) {
+      delete_profile(event.target);
+    });
+  }
+
+
+  function delete_profile(element){
+
+    var csrf_token = "{{ csrf_token() }}";
+    var xhr = new XMLHttpRequest();
+    data = JSON.stringify({
+      'user_id': "{{ user.id }}"
+    });
+
+    xhr.open("POST", "{{ url_for('users.delete_profile') }}", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+    xhr.send(data);
+    xhr.onreadystatechange = function () {
+        if(xhr.responseText){
+            window.location.href = "{{ url_for('main.index') }}";
+        }
+    }
+  }
+
+
+</script>
+<script>
+  volunteer_button = document.getElementById('volunteer')
+  if (volunteer_button != null){ // not a moderator
+    volunteer_button.addEventListener('click', function(event) {
+      volunteer(event.target);
+    });
+  }
+
+  function volunteer(button){
+    var action = button.getAttribute('action');
+    if (action == 'remove'){
+        button.setAttribute('action', 'add');
+        button.innerHTML = 'Add Volunteer';
+    }
+    else{
+        button.setAttribute('action', 'remove');
+        button.innerHTML = 'Remove Volunteer';
+    }
+    var csrf_token = "{{ csrf_token() }}";
+    var xhr = new XMLHttpRequest();
+    data = JSON.stringify({
+      'user_id': "{{ user.id }}",
+      'type': "sign_up_collector",
+      'action': action
+    });
+
+    xhr.open("POST", "{{ url_for('users.add_volunteer') }}", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+    xhr.send(data);
+  }
+</script>
+
+{% endblock %}

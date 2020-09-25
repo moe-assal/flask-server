@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% set description = "" %}
+{% block head %}
+    <meta property="og:title" content="Lebanese White Party - Join Us">
+    <meta property="og:description" content="{{ description }}">
+
+    <meta name="title" content="Lebanese White Party">
+{% endblock %}
+
+{% block body %}
+
+<style media="screen">
+    .home{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Card stats -->
+    <div class="row">
+        <div class="col-12 py-3">
+            <article class="m-auto p-3 bg-default text-card">
+                <header class="mt-1" style="display: flex;">
+                    <h1 class="tc-title col-8 col-md-10">Welcome! </h1>
+                    <div class="col-auto title-icons-wrapper mr-xl-2">
+                        <div class="title-icon">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-facebook-f fa-facebook-color"></i>
+                            </a>
+                        </div>
+                        <div class="title-icon">
+                            <a href="https://twitter.com/share?text={{ description }}&url=https://www.example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-twitter fa-twitter-color"></i>
+                            </a>
+                        </div>
+                        <div class="title-icon">
+                            <a href="https://api.whatsapp.com/send?text={{ description }}  www.example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-whatsapp fa-whatsapp-color"></i>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+                <hr class="tc-hr">
+                <div>
+                    <h2 style="color: white;" class="m-auto">Lebanese White Party:</h2>
+                </div>
+                <div class="py-2 tc-text">
+                    <p>
+                        The Lebanese Revolution must’ve given hope to every Lebanese who looks forward for a better Lebanon. Nonetheless, despite the outrageous efforts, we failed. The core reason we did so is the lack of order.
+                        Not organizing any movement will indefinitely lead to failure. ‘Organization’ doesn’t necessitate the help of foreign governments or the wealthy. ‘Organization’ must not be associated with hierarchal forms of power. It means the teamwork between individuals.
+                        No democratic reformer uses violence as means to operate. Democracy itself must be his weapon. Analyzing the political spectrum in Lebanon, a political party is the only way to reach power peacefully. For the sake of not aligning the political party with an ideology, we called it “Lebanese White Party”. Abbreviated as LWP.
+                        For the LWP not to be miserable as other political parties, radical reforms must take place on the way LWP is organized. To explain how the party must operate, several points must be made clear.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 style="color: white;" class="m-auto">Why traditional political parties will never work, especially Lebanese?</h2>
+                </div>
+                <div class="py-2 tc-text">
+                    <p>
+                        Political parties stand on the basis that several individuals have similar political views. Which is a notably wrong assumption to make. Two persons can NEVER have identical political views, what about thousands?!
+                        Regardless of that, under no circumstance will a political party allow ALL it’s members to have significant effect on decision making apart from ‘yes or no’ questions.
+                        The above arguments are theoretical ones. But practical issues with Lebanese political parties are far more unpleasant. Each and every one of them is accused at some point of allowing foreign intervention in the countries affairs. Moreover, a party president is also accused of favoring his personal benefits over national, for the most part under foreign pressure.
+                    </p>
+                </div>
+
+
+                <div>
+                    <h2 style="color: white;" class="m-auto">Why advocate Direct democracy over Representative?</h2>
+                </div>
+                <div class="py-2 tc-text">
+                    <p>
+                        A simple answer to that would be “are the vast majority of Lebanese proponents of the Lebanese Parliament?”. Then how did we end up in this catastrophe!
+                        Despite representative democracy main goal to undermine the role of the elites in democratic societies, it ironically increased their power. Any form of democratic organization will eventually turn into a bureaucracy in order to maintain efficiency when members exceed thousands.
+                        In other words, why the elites are the only ones ‘eligible’ for candidacy? It’s because our democratic system was created by them.
+                        From these convictions, we want to give power back to the people.
+                    </p>
+                </div>
+
+
+                <div>
+                    <h2 style="color: white;" class="m-auto">How we are implementing Direct democracy?</h2>
+                </div>
+                <div class="py-2 tc-text">
+                    <p>
+                        Surprisingly, using this website! The key mission of this party is to let the people rule.
+                        The decision making process takes 1 month for every 6 decisions/laws/announcements to be made. Every member is allowed to propose a law (law is used as a broad concept incorporating decisions/laws/announcements). Once the laws proposed reach 6, proposing ends.
+                        Each law will take 3 weeks to discuss. While discussing the law, edit proposals are allowed to be presented. If any edit proposal gets significant amount of votes, the law it’s posted at will be modified accordingly.
+                        When the discussion time ends, 1 week will be given to vote for the law. If the law got more up-votes then down-votes, it passes and will be taken into action.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 style="color: white;" class="m-auto">What decisions are we exactly taking?</h2>
+                </div>
+                <div class="py-2 tc-text">
+                    <p>
+                        When we will reach one representative in the parliament. All passed laws will be presented in the parliament. And the representatives will vote according to party’s members votes.
+                        Meanwhile, we can’t take any real actions. We need to spread the message an encourage participation as far as possible.
+                        Once we reach 1 thousand members, the process of writing the party’s official manifesto will begin.
+                        Once we reach the Lebanese Revolution activists, we can start to organize the revolution and make plans for the future of it. Taking decisions in the revolution will be easy if revolutionists participate. Taking policies and establish campaigns will never be the same. We unite, we triumph.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 style="color: white;" class="m-auto">Conclusion</h2>
+                </div>
+                <div class="py-2 tc-text">
+                    <p>
+                        Be a part of our movement. You can sign-up and brainstorm with other members. You can help us grow by inviting others or volunteering
+                        to do various stuff (Public speaker, Social media influencer, Sign-ups collector, Developer, Fundraiser, Journalist...) For contact, national.debate.co@gmail.com.
+                    </p>
+                </div>
+
+                <footer class="col-12 custom-card-footer">
+                    <div class="row text-muted">
+                        <span class="col-6">2020/9/25</span>
+                        <span class="col-6" style="text-align: end;">LWP</span>
+                    </div>
+                </footer>
+            </article>
+        </div>
+
+        {% for law in laws %}
+            <div class="col-md-6 col-12">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-12 status">
+                                <span class="category law-category h4">Law</span>
+                                {% set state = get_status(law) %}
+                                <span class="state h4 {{ state[0] }}">{{ state[1] }}</span>
+                            </div>
+
+                            <div class="col-12 my-2">
+                                <a class="h2 font-weight-bold p-2 title" href="{{ url_for('laws.law', _id_=law.id) }}">{{ law.title }}</a>
+                                <span class="m-3">{{ law.info }}</span>
+                            </div>
+
+                            <div class="col-12 custom-card-footer">
+                                <hr>
+                                <div class="text-muted">
+                                    <span class="author">{{ law.author.user_name }}</span>
+                                    <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

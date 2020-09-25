@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<style media="screen">
+    .propose_law{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-12 py-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0"><span class="fas fa-balance-scale"></span> &nbsp; Add Law </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form action="#" method="post">
+                        {{ law_form.hidden_tag() }}
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{ law_form.title.label(class="form-control-label") }}
+                                {{ law_form.title(class="form-control", id="input-username", **{'data-gramm_editor': "false", 'placeholder': "Title..."}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ law_form.law.label(class="form-control-label") }}
+                                {{ law_form.law(class="form-control", **{'data-gramm_editor': "false", 'rows': "4", 'placeholder': "A few words about you ..."}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ law_form.explanation.label(class="form-control-label") }}
+                                {{ law_form.explanation(class="form-control", **{'data-gramm_editor': "false", 'rows': "4", 'placeholder': "A few words about you ..."}) }}
+                            </div>
+                            <div class="form-group d-flex">
+                                {{ law_form.submit(class="btn btn-default m-auto", **{'data-gramm_editor': "false"}) }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

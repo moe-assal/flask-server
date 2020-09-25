@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+            <h1 class="text-white d-inline-block mb-0 mr-3"><span class="fas fa-atlas"></span>&nbsp; Translate Law to Arabic:</h1>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-12 status">
+                            <span class="category law-category h4">Law</span>
+                        </div>
+
+                        <div class="col-12 mt-2">
+                            <h2 class="h2 font-weight-bold p-2">{{ law.title }}</h2>
+                            <span class="m-3">{{ law.info }}</span>
+                        </div>
+
+                        <div class="col-12 my-2 mb-3">
+                            <h2 class="h2 font-weight-bold p-2">Explanation</h2>
+                            <span class="m-3">{{ law.explanation }}</span>
+                        </div>
+
+                        <div class="col-12 custom-card-footer">
+                            <hr>
+                            <div class="text-muted">
+                                <span class="author">{{ law.author.user_name }}</span>
+                                <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12 py-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Translation </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body rtl">
+
+                    <form action="#" method="post">
+                        {{ translate_law_form.hidden_tag() }}
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{ translate_law_form.title_arabic.label(class="form-control-label") }}
+                                {{ translate_law_form.title_arabic(class="form-control", **{'placeholder': "Title..."}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ translate_law_form.info_arabic.label(class="form-control-label") }}
+                                {{ translate_law_form.info_arabic(class="form-control", **{'data-gramm_editor': "false", 'placeholder': "A few words about you ...", 'rows': "4"}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ translate_law_form.explanation_arabic.label(class="form-control-label") }}
+                                {{ translate_law_form.explanation_arabic(class="form-control", **{'data-gramm_editor': "false", 'placeholder': "A few words about you ...", 'rows': "4"}) }}
+
+                            </div>
+                            <div class="form-group">
+                                {{ translate_law_form.submit(class="btn btn-default p-3") }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

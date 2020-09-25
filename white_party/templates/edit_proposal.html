@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0"><span class="fas fa-drafting-compass"></span>&nbsp; Edit Proposal</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.discussion') }}"><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('laws.law', _id_=edit_proposal.posted_at.id) }}">Law</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Proposal</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Card stats -->
+    <div class="row">
+
+        <div class="col-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 status" id="edit-proposal-change">
+                            <span class="category proposal-category h4">Proposal</span>
+                            {% if moderator == "yes" %}
+                                <button type="button" name="button" class="btn btn-sm btn-default float-right fas fa-trash" id="delete-edit-proposal"></button>
+                                <button type="button" name="button" class="btn btn-sm btn-default float-right fas fa-pen-alt" id="update-edit-proposal"></button>
+                                <button type="button" name="button" class="btn btn-sm btn-default float-right fas fa-language" id="translate-edit-proposal"></button>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 mt-2">
+                            <h2 class="h2 font-weight-bold m-3">{{ edit_proposal.title }}</h2>
+                            <span class="m-3">{{ edit_proposal.info }}</span>
+                        </div>
+                        <div class="col-12 my-2 mb-3">
+                            <h2 class="h2 font-weight-bold m-3">Explanation</h2>
+                            <span class="m-3">{{ edit_proposal.explanation }}</span>
+                        </div>
+
+                        <div class="col-12 custom-card-footer">
+                            <hr>
+                            <div class="text-muted">
+                                <span class="author">{{ edit_proposal.author.user_name }}</span>
+                                <span class="date">{{ edit_proposal.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Comments -->
+        <div class="col-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row" id="all_comments">
+                        {% if comments_paginate.items.__len__() != 0 %}
+                            <div class="col-12 status mb-2">
+                                <span class="category comment-category h4">Comments</span>
+                            </div>
+                            {% for comment in comments_paginate.items %}
+                                <div class="col-2 col-md-1 comment-profile">
+                                    <a href="{{ url_for('users.profile', user_id=comment.author.id )}}">
+                                        <img src="{{ comment.author.profile_image_url() }}" alt="Profile Image">
+                                    </a>
+                                </div>
+                                <article class="col-10 col-md-11 comment-body mb-4" style="display: inline-grid;">
+                                    <span style="width: 100%;font-size: 1.3rem;color: #32325d;">{{ comment.author.user_name }}</span>
+                                    <span style="width: 100%;" class="text-muted">{{ comment.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                    <span class="my-3">{{ comment.content }}</span>
+                                    <div class="flex">
+                                        <span id="{{ comment.id }}">{{ comment.likes }}</span>
+                                        {% if logged_user %}
+                                            {% if logged_user in comment.users_likes %}
+                                                <button type="button" name="button" class="fa fa-thumbs-up mr-4 like-button liked" aria-hidden="true" comment_id="{{ comment.id }}" liked="yes"></button>
+                                            {% else %}
+                                                <button type="button" name="button" class="fa fa-thumbs-up mr-4 like-button" aria-hidden="true" comment_id="{{ comment.id }}" liked="no"></button>
+                                            {% endif %}
+                                        {% else %}
+                                                <button type="button" name="button" class="fa fa-thumbs-up mr-4 like-button" aria-hidden="true" comment_id="{{ comment.id }}" liked="cant"></button>
+                                        {% endif %}
+                                        <span>{{ comment.children.__len__() }}</span>
+                                        <button type="button" name="button" class="fas fa-share reply-button" aria-hidden="true" comment_id="{{ comment.id }}"></button>
+                                    </div>
+                                </article>
+                                {% if comment.children.__len__() != 0 %}
+                                    <div class="replies col-12">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                {% for reply in comment.children %}
+                                                    <div class="col-2 col-md-1"></div>
+                                                    <div class="col-2 col-md-1 comment-profile">
+                                                        <a href="{{ url_for('users.profile', user_id=reply.author.id )}}">
+                                                            <img src="{{ reply.author.profile_image_url() }}" alt="Profile Image">
+                                                        </a>
+                                                    </div>
+                                                    <article class="col-8 col-md-10" style="display: inline-grid;">
+                                                        <span style="width: 100%;font-size: 1.3rem;color: #32325d;">{{ reply.author.user_name }}</span>
+                                                        <span style="width: 100%;" class="text-muted">{{ reply.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                                        <span class="my-3">{{ reply.content }}</span>
+                                                        <div class="flex">
+                                                            <span id="{{ reply.id }}">{{ reply.likes }}</span>
+                                                            {% if logged_user %}
+                                                                {% if logged_user in reply.users_likes %}
+                                                                    <button type="button" name="button" class="fa fa-thumbs-up mr-4 like-button liked" aria-hidden="true" comment_id="{{ reply.id }}" liked="yes"></button>
+                                                                {% else %}
+                                                                    <button type="button" name="button" class="fa fa-thumbs-up mr-4 like-button" aria-hidden="true" comment_id="{{ reply.id }}" liked="no"></button>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <button type="button" name="button" class="fa fa-thumbs-up mr-4 like-button" aria-hidden="true" comment_id="{{ reply.id }}" liked="cant"></button>
+                                                            {% endif %}
+                                                        </div>
+
+                                                    </article>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-12 mb-2">
+                                <span class="h4">Be the first to add a comment :)</span>
+                            </div>
+                        {% endif %}
+
+                        {% if comments_paginate.pages > 1 %}
+                            <div class="col-12 my-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-center">
+                                        {% for page_num in comments_paginate.iter_pages() %}
+                                            {% if page_num %}
+                                                {% if page_num == comments_paginate.page %}
+                                                    <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link" href="{{ url_for('proposals.edit_proposal', law_id=proposal.posted_at.id, proposal_id=proposal.id)}}?comment_page={{ page_num }}">{{ page_num }}</a></li>
+                                                {% endif %}
+                                            {% else %}
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <form class="col-12" action="#" method="post">
+                            {{ comment_form.hidden_tag() }}
+                            <div class="form-group">
+                                <label class="form-control-label"><span class="fas fa-comment-dots"></span> Comment</label>
+                                {{ comment_form.comment(class="form-control", id="comment-form", **{'placeholder': "A few words about you ..."}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ comment_form.submit(class="btn btn-default p-2") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+  document.getElementById('all_comments').addEventListener('click', function(event) {
+    like(event.target);
+  });
+  function like(element){
+    var comment_id = element.getAttribute('comment_id');
+    var liked = element.getAttribute('liked');
+    if (comment_id != null){
+      if (liked != null){ // like button
+        var like_num_element = document.getElementById(comment_id);
+        if (liked == "yes"){
+          like_num_element.innerHTML = parseInt(like_num_element.innerHTML) - 1;
+          element.setAttribute('liked', 'no');
+          element.setAttribute('class', 'fa fa-thumbs-up mr-4 like-button');
+        }
+        else if (liked == "no") {
+          like_num_element.innerHTML = parseInt(like_num_element.innerHTML) + 1;
+          element.setAttribute('liked', 'yes');
+          element.setAttribute('class', 'fa fa-thumbs-up mr-4 like-button liked');
+        }
+        var csrf_token = "{{ csrf_token() }}";
+        var xhr = new XMLHttpRequest();
+        data = JSON.stringify({
+          'comment_id': comment_id
+        })
+        xhr.open("POST", "{{ url_for('proposals.comment_like') }}", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader("X-CSRFToken", csrf_token);
+        xhr.send(data);
+        xhr.onreadystatechange = function () {
+          if(xhr.responseText == "{{ url_for('users.login') }}"){
+            window.location.href = "{{ url_for('users.login') }}";
+          }
+        }
+      }
+      else {  // reply button
+        document.getElementById('comment-form').value = "@" + comment_id + " ";
+      }
+    }
+  }
+</script>
+<script type="text/javascript">
+  base_element = document.getElementById('edit-proposal-change');
+  if (base_element != null){
+    base_element.addEventListener('click', function(event) {
+      change_edit_proposal(event.target);
+    });
+  }
+  function change_edit_proposal(button){
+    var csrf_token = "{{ csrf_token() }}";
+    if (button.getAttribute('id') == "delete-edit-proposal"){
+      var xhr = new XMLHttpRequest();
+      data = JSON.stringify({
+        'proposal_id': "{{ edit_proposal.id }}"
+      });
+      xhr.open("POST", "{{ url_for('proposals.delete') }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.send(data);
+      xhr.onreadystatechange = function () {
+        if(xhr.responseText == "403"){
+          window.location.href = "{{ url_for('users.login') }}";
+        }
+        else if(xhr.responseText == "200"){
+          window.location.href = "{{ url_for('main.index') }}"
+        }
+        else if (xhr.responseText){
+          alert("unknown error");
+        }
+      }
+    }
+    else if(button.getAttribute('id') == "update-edit-proposal"){
+      window.location.href = "{{ url_for('proposals.update_edit_proposal', law_id=edit_proposal.posted_at.id, proposal_id=edit_proposal.id) }}";
+    }
+    else if(button.getAttribute('id') == "translate-edit-proposal"){
+      window.location.href = "{{ url_for('proposals.translate_edit_proposal', law_id=edit_proposal.posted_at.id, proposal_id=edit_proposal.id) }}";
+    }
+  }
+</script>
+
+{% endblock %}

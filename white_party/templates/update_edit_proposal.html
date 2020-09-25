@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 py-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0"><span class="fas fa-hard-hat"></span> &nbsp; Update Edit Proposal </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="#" method="post">
+                        {{ update_edit_proposal_form.hidden_tag() }}
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{ update_edit_proposal_form.title.label(class="form-control-label") }}
+                                {{ update_edit_proposal_form.title(class="form-control", **{'data-gramm_editor': "false", 'placeholder': "Title..."}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ update_edit_proposal_form.info.label(class="form-control-label") }}
+                                {{ update_edit_proposal_form.info(class="form-control", **{'data-gramm_editor': "false", 'rows':"4", 'placeholder': "A few words about you ..."}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ update_edit_proposal_form.explanation.label(class="form-control-label") }}
+                                {{ update_edit_proposal_form.explanation(class="form-control", **{'data-gramm_editor': "false", 'rows': "4", 'placeholder':"A few words about you ..."}) }}
+                            </div>
+                            <div class="form-group d-flex">
+                                {{ update_edit_proposal_form.submit(class="btn btn-default m-auto") }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

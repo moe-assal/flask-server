@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container py-2">
+    <div class="row py-4">
+        <div class="col-12 py-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h1 class="mb-0 h3"><span class="fas fa-pencil-ruler"></span> &nbsp; Send Notification </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="#" method="post">
+                        {{ notification_form.hidden_tag() }}
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{ notification_form.recipient_id.label(class="form-control-label") }}
+                                {{ notification_form.recipient_id(class="form-control", **{'placeholder': "set to '00000' to send to all users..."}) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ notification_form.message.label(class="form-control-label") }}
+                                {{ notification_form.message(class="form-control", **{'data-gramm_editor': "false", 'rows':"4", 'placeholder': "new lines will not be added..."}) }}
+                            </div>
+
+                            <div class="form-group d-flex">
+                                {{ notification_form.submit(class="btn btn-default m-auto") }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

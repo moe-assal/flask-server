@@ -1,0 +1,171 @@
+{% extends 'ar/base.html' %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+    <div class="row align-items-center py-4 rtl">
+        <div class="col-lg-6 col-7">
+            <h1 class="text-white d-inline-block mb-0 mr-3"><span class="fas fa-balance-scale"></span>&nbsp; قانون </h1>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block mr-2">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark breadcrumb-arabic">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.discussion') }}"><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item active" aria-current="page">قانون</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Card stats -->
+    <div class="row">
+        <div class="col-12 rtl">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 status">
+                            <span class="category law-category h4 mr-0 ml-auto ar">قانون</span>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <h2 class="h2 font-weight-bold m-3 ar">{{ law.title_arabic }}</h2>
+                            <span class="m-3 ar">{{ law.info_arabic }}</span>
+                        </div>
+                        <div class="col-12 my-2">
+                            <h2 class="h2 font-weight-bold m-3 ar">توضيح</h2>
+                            <span class="m-3 ar">{{ law.explanation_arabic }}</span>
+                        </div>
+                        <div class="col-12">
+                            <h2 class="h2 font-weight-bold m-3 ar">معلومات</h2>
+                            {% set state = get_status_arabic(law) %}
+                            <div class="m-2 ar">{{ state[1] }}. {{ state[3] }}</div>
+                        </div>
+                        <div class="col-12 custom-card-footer">
+                            <hr>
+                            <div class="text-muted">
+                                <span class="author" style="text-align: right; !important">{{ law.author.user_name }}</span>
+                                <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="all-proposals">
+        {% for proposal in proposals_paginate.items %}
+            <div class="col-xl-4 col-md-6 col-12">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row rtl">
+
+                            <div class="col-12">
+                                <div class="status">
+                                    <h4 class="category proposal-category mr-0 ml-auto ar">اقتراح</h4>
+                                </div>
+                                <a class="h2 font-weight-bold m-3 p-0 d-inline-flex col-12 ar" href="{{ url_for('proposals.edit_proposal_arabic', law_id=law.id, proposal_id=proposal.id) }}">{{ proposal.title_arabic }}</a>
+                                <div class="mb-3 ar">{{ proposal.info_arabic }}</div>
+                            </div>
+
+                            <div class="col-4" style="display: flex;">
+                                {% if logged_user %}
+                                    {% if logged_user in proposal.voters %}
+                                        <div class="fas fa-check icon icon-shape bg-gradient-check text-white rounded-circle shadow m-auto" proposal-id="{{ proposal.id }}" voted="yes"></div>
+                                    {% else %}
+                                        <div class="fas fa-check icon icon-shape bg-gradient-check text-white rounded-circle shadow m-auto" proposal-id="{{ proposal.id }}" voted="no"></div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="fas fa-check icon icon-shape bg-gradient-check text-white rounded-circle shadow m-auto" proposal-id="{{ proposal.id }}" voted="cant"></div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-8">
+                                <div class="score-wrapper">
+                                    <span class="score" id="vote-num-{{ proposal.id }}">{{ proposal.up_votes }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 custom-card-footer">
+                                <hr>
+                                <div class="text-muted">
+                                    <span class="author" style="text-align: right; !important">{{ proposal.author.user_name }}</span>
+                                    <span class="date">{{ proposal.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if proposals_paginate.pages > 1 %}
+        <div class="col-12 my-3">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% for page_num in proposals_paginate.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num == proposals_paginate.page %}
+                                <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('laws.law', _id_=law.id)}}?proposals_page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+
+</div>
+
+
+
+<script type="text/javascript">
+
+  document.getElementById('all-proposals').addEventListener('click', function(event) {
+    vote(event.target);
+  }, true);
+
+  function vote(element){
+    var proposal_id = element.getAttribute('proposal-id');
+    if (proposal_id != null){
+      var vote_num_element = document.getElementById('vote-num-' + proposal_id);
+      var voted = element.getAttribute('voted');
+
+      if (voted == "yes"){
+        vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) - 1;
+        element.setAttribute('voted', 'no');
+        element.classList.remove('voted-in');
+      }
+      else if (voted == "no") {
+        vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) + 1;
+        element.setAttribute('voted', 'yes');
+        element.classList.add('voted-in');
+      }
+
+      var csrf_token = "{{ csrf_token() }}";
+      var xhr = new XMLHttpRequest();
+      data = JSON.stringify({
+        'proposal_id': proposal_id
+      });
+
+      xhr.open("POST", "{{ url_for('proposals.vote') }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.send(data);
+      xhr.onreadystatechange = function () {
+        if(xhr.responseText == "{{ url_for('users.login') }}"){
+          window.location.href = "{{ url_for('users.login') }}";
+        }
+      }
+
+    }
+  }
+
+</script>
+{% endblock %}

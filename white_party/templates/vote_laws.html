@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+    <meta name="robots" content="noarchive, index, follow">
+{% endblock %}
+
+{% block body %}
+
+<style media="screen">
+    .vote{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+ <div class="container-fluid">
+    <!-- Card stats -->
+    <div class="row" id='all_laws'>
+          <div class="col-12 p-4 pb-0">
+            <h6 class="h2 text-white d-inline-block mb-0"><span class="fas fa-person-booth" aria-hidden="true"></span>&nbsp; Vote</h6>
+          </div>
+
+        {% for law in laws %}
+            <div class="col-12 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="status">
+                                    <span class="category law-category h4">Law</span>
+                                    {% set state = get_status(law) %}
+                                    <span class="state h4 {{ state[0] }}">{{ state[1] }}</span>
+                                </div>
+                                <a href="{{ url_for('laws.law', _id_=law.id )}}" class="h2 font-weight-bold py-3 m-0 d-block">{{ law.title }}</a>
+                                <div>{{ law.info }}</div>
+                            </div>
+
+                            <div class="col-12 custom-card-footer mb-3">
+                                <hr>
+                                <div class="text-muted">
+                                    <span class="author">{{ law.author.user_name }}</span>
+                                    <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-4" style="display: flex;">
+                                {% if logged_user %}
+                                    {% if vote_papers[law.id] and vote_papers[law.id].vote == 0 %}
+                                        <div class="fas fa-angle-down icon icon-shape bg-gradient-downvote text-white rounded-circle m-auto voted-in" name="downvote" law_id="{{ law.id }}" voted="yes" id="down-button-{{ law.id }}">
+                                        </div>
+                                    {% else %}
+                                        <div class="fas fa-angle-down icon icon-shape bg-gradient-downvote text-white rounded-circle m-auto" name="downvote" law_id="{{ law.id }}" voted="no" id="down-button-{{ law.id }}">
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="fas fa-angle-down icon icon-shape bg-gradient-downvote text-white rounded-circle m-auto" name="downvote" law_id="{{ law.id }}" voted="cant" id="down-button-{{ law.id }}">
+                                    </div>
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="score-wrapper">
+                                    <span class="score" id="vote-num-{{ law.id }}">{{ (law.up_votes|int) - (law.down_votes|int)}}</span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4" style="display: flex;">
+                                {% if logged_user %}
+                                    {% if vote_papers[law.id] and vote_papers[law.id].vote == 1 %}
+                                        <div class="fas fa-angle-up icon icon-shape bg-gradient-upvote text-white rounded-circle m-auto voted-in" name="upvote" law_id="{{ law.id }}" voted="yes" id="up-button-{{ law.id }}">
+                                        </div>
+                                    {% else %}
+                                        <div class="fas fa-angle-up icon icon-shape bg-gradient-upvote text-white rounded-circle m-auto" name="upvote" law_id="{{ law.id }}" voted="no" id="up-button-{{ law.id }}">
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="fas fa-angle-up icon icon-shape bg-gradient-upvote text-white rounded-circle m-auto" name="upvote" law_id="{{ law.id }}" voted="cant" id="up-button-{{ law.id }}">
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+ </div>
+
+<script type="text/javascript">
+
+  document.getElementById('all_laws').addEventListener('click', function(event) {
+    vote(event.target);
+  });
+
+  function vote(element){
+    var law_id = element.getAttribute('law_id');
+    if (law_id != null){
+      var vote_num_element = document.getElementById('vote-num-' + law_id);
+      var voted = element.getAttribute('voted');
+      var type = element.getAttribute('name');
+
+      var past_vote = return_default(law_id);
+
+      var action = 'revert';
+
+      if (past_vote == null || type != past_vote){
+        if (type == "upvote"){
+            vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) + 1;
+            element.setAttribute('voted', 'yes');
+            element.classList.add('voted-in');
+            action = 'upvote';
+        }
+
+        else if (type == "downvote") {
+            vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) - 1;
+            element.setAttribute('voted', 'yes');
+            element.classList.add('voted-in');
+            action = 'downvote';
+        }
+      }
+
+
+      var csrf_token = "{{ csrf_token() }}";
+      var xhr = new XMLHttpRequest();
+      data = JSON.stringify({
+        'law_id': law_id.toString(),
+        'vote': action
+      });
+      xhr.open("POST", "{{ url_for('laws.vote_laws') }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.send(data);
+
+      xhr.onreadystatechange = function () {
+        if(xhr.responseText == "{{ url_for('users.login') }}"){
+          window.location.href = "{{ url_for('users.login') }}";
+
+        }
+      }
+
+    }
+  }
+
+  function return_default(law_id) {
+    law_id = law_id.toString()
+    var vote_num_element = document.getElementById('vote-num-' + law_id);
+
+    var past_vote = null;
+    upvote_button = document.getElementById('up-button-' + law_id);
+    downvote_button = document.getElementById('down-button-' + law_id);
+
+    if (upvote_button.getAttribute('voted') == 'yes'){
+      vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) - 1;
+      past_vote = 'upvote';
+    }
+    else if (downvote_button.getAttribute('voted') == 'yes') {
+      past_vote = 'downvote';
+      vote_num_element.innerHTML = parseInt(vote_num_element.innerHTML) + 1;
+      already_voted = true;
+    }
+
+    upvote_button.setAttribute('voted', 'no');
+    upvote_button.classList.remove('voted-in');
+
+    downvote_button.setAttribute('voted', 'no');
+    downvote_button.classList.remove('voted-in');
+
+    return past_vote;
+  }
+</script>
+{% endblock %}

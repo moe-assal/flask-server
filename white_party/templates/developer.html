@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% set description = "This site needs the help of programmers. programmers who want to see a better Lebanon and want to join a community of dreamers." %}
+{% block head %}
+    <meta property="og:title" content="Lebanese White Party - DEVs">
+    <meta property="og:description" content="{{ description }}">
+
+    <meta name="title" content="Developers of Lebanese White Party - Volunteer">
+{% endblock %}
+
+{% block body %}
+
+<style media="screen">
+    .developers{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 py-3">
+            <article class="m-auto p-3 bg-default text-card">
+                <header class="mt-1" style="display: flex;">
+                    <h1 class="tc-title col-8 col-md-10"><span class="fas fa-coffee" aria-hidden="true"></span> For Developers</h1>
+                    <div class="col-auto title-icons-wrapper mr-xl-2">
+                        <div class="title-icon">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-facebook-f fa-facebook-color"></i>
+                            </a>
+                        </div>
+                        <div class="title-icon">
+                            <a href="https://twitter.com/share?text={{ description }}&url=https://www.example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-twitter fa-twitter-color"></i>
+                            </a>
+                        </div>
+                        <div class="title-icon">
+                            <a href="https://api.whatsapp.com/send?text={{ description }}  www.example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-whatsapp fa-whatsapp-color"></i>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+                <hr class="tc-hr">
+                <p class="py-2 tc-text">This site needs the help of developers. If you are a tech savvy, please contact
+                    me if you can do one of these tasks (for free, for the community). If you want to take a major role at maintaining the site, you are also welcomed.</p>
+
+                <div class="py-2 tc-text">
+                    <h2>Technologies:</h2>
+                    <ul class='tc-list-items'>
+                        <li>Python 3 backend</li>
+                        <li>flask micro web framework</li>
+                        <li>flask-Sqlalchemy</li>
+                        <li>Apache web server</li>
+                        <li>HTML5 CSS3</li>
+                        <li>Vanilla JavaScript (Using JQuery TEMPORARILY</li>
+                        <li>Bootstrap-based framework</li>
+                    </ul>
+                </div>
+
+                <div class="py-2 tc-text">
+                    <h2>Short-term Tasks:</h2>
+                    <ul class='tc-list-items'>
+                        <li>Web Security expert to check website-frontend and server configurations for vulnerabilities.</li>
+                        <li>Flask/flask-sqlalchemy (sqlite) expert to optimize code and look for inconsistencies.</li>
+                        <li>Implement Elastic Search algorithm or any other efficient algorithm for searching database</li>
+                        <li>Implement an efficient program (Flask-migrate) for database migrations.</li>
+                        <li>Fullstack Developer to replace Pagination with GET requests.</li>
+                        <li>JavaScript developer to create share button for posts, laws, edit-proposals.</li>
+                    </ul>
+                </div>
+
+                <div class="py-2 tc-text">
+                    <h2>Long-term Tasks</h2>
+                    <ul class='tc-list-items'>
+                        <li>Implement a voting system using BlockChain technology.</li>
+                        <li>Program a Web-Application or Android-Application(Java/Kotlin).</li>
+                    </ul>
+                </div>
+
+                <p class="py-2 tc-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                <footer>
+                    <div class="row text-muted">
+                        <span class="col-6">2002/5/6</span>
+                        <span class="col-6" style="text-align: end;">moe-assal</span>
+                    </div>
+                </footer>
+            </article>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

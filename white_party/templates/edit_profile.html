@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 py-6">
+            <div class="card card-profile">
+                <div class="card-img-top">
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-3 order-lg-2">
+                        <div class="card-profile-image">
+                            <a href="#">
+                                <img src="{{ logged_user.profile_image_url() }}" class="rounded-circle">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-profile-stats d-flex justify-content-center">
+                                <div>
+                                    <span class="heading">22</span>
+                                    <span class="description">Following</span>
+                                </div>
+                                <div>
+                                    <span class="heading">10</span>
+                                    <span class="description">Followers</span>
+                                </div>
+                                <div>
+                                    <span class="heading">89</span>
+                                    <span class="description">Posts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h1 class="h3">
+                            {{ logged_user.user_name }}<span class="font-weight-light">, 27</span>
+                        </h1>
+                        <div class="h5 font-weight-300">
+                            <i class="ni location_pin mr-2"></i>Bucharest, Romania
+                        </div>
+                        <div class="h5 mt-4">
+                            <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
+                        </div>
+                        <div class="h5 my-2">
+                            {{ logged_user.description }}
+                        </div>
+                        <div>
+                            <i class="ni education_hat mr-2"></i>University of Computer Science
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 py-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h1 class="h3 mb-0"><span class="fas fa-user-edit"></span> Edit profile </h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        {{ edit_profile_form.hidden_tag() }}
+
+                        <h3 class="heading-small text-muted mb-4">User information</h3>
+                        <div class="pl-lg-4">
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+
+                                        {{ edit_profile_form.email.label(class="form-control-label")}}
+                                        {{ edit_profile_form.email(class="form-control", **{'placeholder': "jesse@example.com"})}}
+                                        {% for error in edit_profile_form.email.errors %}
+                                            <span class="input-error"> {{error}} </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        {{ edit_profile_form.picture.label(class="form-control-label")}}
+                                        {{ edit_profile_form.picture(id="input-last-name", class="form-control")}}
+                                        {% for error in edit_profile_form.picture.errors %}
+                                            <div>
+                                                <span class="input-error"> {{ error }} </span>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+
+                        <!-- Description -->
+                        <h3 class="heading-small text-muted mb-4">About me</h3>
+
+                        <div class="pl-lg-4">
+                            <div class="form-group">
+                                {{ edit_profile_form.description.label(class="form-control-label")}}
+                                {{ edit_profile_form.description(class="form-control", **{'placeholder': "A few words about you ...", 'rows': "4" })}}
+                                {% for error in edit_profile_form.description.errors %}
+                                    <div>
+                                        <span class="error"> {{error}} </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group d-flex">
+                            {{ edit_profile_form.submit(class="btn btn-default m-auto") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

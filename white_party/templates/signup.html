@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<style media="screen">
+    .register{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container py-5 pt-6">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-xl-5">
+      <div class="card bg-secondary border-0 mb-0">
+        <div class="card-body px-lg-5 py-lg-5">
+          <div class="mb-4 text-center">
+            <img src="{{ url_for('static', filename='img/brand/favicon.png') }}" alt="">
+          </div>
+          <form role="form" action="#" method="post" enctype="multipart/form-data">
+            {{ signup_form.hidden_tag() }}
+
+            <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-address-card"></i></span>
+                </div>
+                {{ signup_form.membership_id(class="form-control", **{'placeholder': "Membership ID"}) }}
+              </div>
+              {% for error in signup_form.membership_id.errors %}
+                <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
+                </div>
+                {{ signup_form.username(class="form-control", **{'placeholder': "Name on National ID"}) }}
+              </div>
+              {% for error in signup_form.username.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                </div>
+                {{ signup_form.gender(class="form-control", **{'placeholder': "Gender"}) }}
+              </div>
+              {% for error in signup_form.gender.errors %}
+                <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-envelope-open"></i></span>
+                </div>
+                {{ signup_form.email(class="form-control", **{'placeholder': "Email"}) }}
+              </div>
+              {% for error in signup_form.email.errors %}
+                <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                </div>
+                {{ signup_form.phone_number(class="form-control", **{'placeholder': "Phone Number e.g. +96171804948"}) }}
+              </div>
+              {% for error in signup_form.phone_number.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-map"></i></span>
+                </div>
+                {{ signup_form.governorate(class="form-control", **{'placeholder': "Governorate"}) }}
+              </div>
+              {% for error in signup_form.governorate.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-map-marked"></i></span>
+                </div>
+                {{ signup_form.district(class="form-control", **{'placeholder': "District"}) }}
+              </div>
+              {% for error in signup_form.district.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-address-book"></i></span>
+                </div>
+                {{ signup_form.civil_registry_num(class="form-control", **{'placeholder': "No. Civil Registry"}) }}
+              </div>
+              {% for error in signup_form.civil_registry_num.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-address-book"></i></span>
+                </div>
+                {{ signup_form.national_identity_num(class="form-control", **{'placeholder': "No. National Identity"}) }}
+              </div>
+              {% for error in signup_form.national_identity_num.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                </div>
+                {{ signup_form.birth_date(class="form-control", **{'placeholder': "Birth Date"}) }}
+              </div>
+              {% for error in signup_form.birth_date.errors %}
+                  <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                </div>
+                {{ signup_form.password(class="form-control", **{'placeholder': "Password"})}}
+              </div>
+              {% for error in signup_form.password.errors %}
+                <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+
+
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                </div>
+                {{ signup_form.confirm_password(class="form-control", **{'placeholder': "Confirm Password"}) }}
+              </div>
+              {% for error in signup_form.confirm_password.errors %}
+                <span class="input-error"> {{error}} </span>
+              {% endfor %}
+            </div>
+
+
+
+
+            <div class="custom-control custom-control-alternative custom-checkbox">
+              {{ signup_form.remember(class="custom-control-input") }}
+              {{ signup_form.remember.label(class="custom-control-label text-muted") }}
+            </div>
+
+            <div class="text-center">
+              {{ signup_form.submit(class="btn btn-primary my-4") }}
+            </div>
+
+          </form>
+        </div>
+      </div>
+      <div class="row mt-3">
+          <div class="col-6">
+              <a href="{{ url_for('users.reset_request') }}" class="text-light"><small>Forgot password?</small></a>
+          </div>
+          <div class="col-6 text-right">
+              <a href="{{ url_for('users.login') }}" class="text-light"><small>Already have an account</small></a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

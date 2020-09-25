@@ -1,0 +1,53 @@
+{% extends 'ar/base.html' %}
+
+{% block body %}
+
+<style media="screen">
+    .discussion{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Card stats -->
+    <div class="row rtl">
+        <div class="col-12 py-3 rtl">
+            <h1 class="text-white d-inline-block mb-0" style="font-size: 2rem;"><span class="fas fa-comments"></span><span class="ar"> صفحة المناقشة: </span></h1>
+        </div>
+
+        {% for law in laws %}
+            <div class="col-md-6 col-12">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div class="col-12 status-arabic">
+                                <span class="category law-category h4 ar">قانون</span>
+                                <span class="state h4 discuss-state ar">قيد المناقشة</span>
+                            </div>
+
+                            <div class="col-12 my-2">
+                                <a class="h2 font-weight-bold p-2 title ar" href="{{ url_for('laws.law', _id_=law.id) }}">{{ law.title_arabic }}</a>
+                                <span class="m-3 ar">{{ law.info_arabic }}</span>
+                            </div>
+
+                            <div class="col-12 custom-card-footer">
+                                <hr>
+                                <div class="text-muted">
+                                    <span class="author text-right">{{ law.author.user_name }}</span>
+                                    <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

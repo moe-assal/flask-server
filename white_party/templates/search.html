@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block body %}
+
+<style media="screen">
+    .search_law{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <!-- Card stats -->
+    <div class="row">
+
+        <div class="col-12 my-5" style="display: flex;">
+            <form class="custom-search-form text-muted search-law-form col-12 col-md-6 col-xl-4" action="#" method="post">
+                <input type="text" id="search" name="search-text" placeholder="type query..." class="pl-1">
+                <button type="submit" name="button" id="submit">
+                    <span class="fas fa-search" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+
+        <div class="col-12 mb-4 text-secondary">
+            <h1 style="color: inherit;">Results: </h1>
+            <hr style="border-color: rgb(255, 255, 255, .5);" class="my-2">
+        </div>
+
+
+
+        {% if laws_paginate %}
+            {% if laws_paginate.items.__len__() != 0 %}
+                <div class="col-12">
+                    <div class="container-fluid">
+                        <div class="row">
+                            {% for law in laws_paginate.items %}
+
+                                <div class="col-12 col-md-6">
+                                    <div class="card card-stats">
+                                        <!-- Card body -->
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="status">
+                                                        <span class="category law-category h4">Law</span>
+                                                        {% set state = get_status(law) %}
+                                                        <span class="state h4 {{ state[0] }}">{{ state[1] }}</span>
+                                                    </div>
+
+                                                    <a href="{{ url_for('laws.law', _id_=law.id) }}" class="h2 font-weight-bold my-3 title">{{ law.title }}</a>
+                                                    <div class="m-3">{{ law.info }}</div>
+                                                    <h5 class="text-muted"></h5>
+                                                </div>
+
+                                                <div class="col-12 custom-card-footer">
+                                                    <hr>
+                                                    <div class="text-muted">
+                                                        <span class="author">{{ law.author.user_name }}</span>
+                                                        <span class="date">{{ law.date_posted.strftime('%Y-%m-%d %H:%M') }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="col-12 col-md-6 m-auto py-8">
+                    <div class="card card-stats">
+                        <!-- Card body -->
+                        <div class="card-body py-4">
+                            <div class="row">
+                                <div class="col-12 py-3">
+                                    <h2 class="h2 font-weight-bold text-center">No results found :(</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% else %}
+
+
+
+            <div class="col-12 col-md-6 m-auto py-8">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body py-3">
+                        <div class="row py-2">
+                            <div class="col-12 py-3">
+                                <h2 class="h2 font-weight-bold text-center">Please enter search Keyword</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if laws_paginate %}
+            {% if laws_paginate.pages > 1 %}
+                <div class="col-12 my-3">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            {% for page_num in laws_paginate.iter_pages() %}
+                                {% if page_num %}
+                                    {% if page_num == laws_paginate.page %}
+                                        <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="{{ url_for('main.search') }}?law_page={{ page_num }}">{{ page_num }}</a></li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'ar/base.html' %}
+
+{% block head %}
+    <meta property="og:title" content="الحزب الأبيض اللبناني - متبرعون">
+    <meta property="og:description" content="تبرع ببعض المال لمجتمعنا، فنحن نعتمد فقط على التبرعات الصغيرة لكي نبقاء مستقلين. إذا لم تكن قد انضممت بعد، اتصل بنا!">
+
+    <meta name="title" content="الحزب الأبيض اللبناني - متبرعون">
+{% endblock %}
+
+{% block body %}
+<style media="screen">
+    .fundraising{
+        margin-right: .5rem;
+        margin-left: .5rem;
+        padding-right: 1rem !important;
+        border-radius: .375rem;
+        background: #f6f9fc;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-auto py-3 rtl">
+            <h6 class="h2 text-white d-inline-block mb-0" style="font-size: 2rem;"><span class="fas fa-hand-holding-usd"></span> Fundraising</h6>
+        </div>
+
+        <div class="col-12 py-3">
+            <article class="m-auto p-3 bg-default text-card">
+                <header class="mt-1" style="display: flex;">
+                    <h1 class="tc-title col-8 col-md-10">About Money...</h1>
+                    <div class="col-auto title-icons-wrapper mr-xl-2">
+                        <div class="title-icon">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-facebook-f fa-facebook-color"></i>
+                            </a>
+                        </div>
+                        <div class="title-icon">
+                            <a href="https://twitter.com/share?text=تبرع ببعض المال لمجتمعنا، فنحن نعتمد فقط على التبرعات الصغيرة لكي نبقاء مستقلين. إذا لم تكن قد انضممت بعد، اتصل بنا!&url=https://www.example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-twitter fa-twitter-color"></i>
+                            </a>
+                        </div>
+                        <div class="title-icon">
+                            <a href="https://api.whatsapp.com/send?text=تبرع ببعض المال لمجتمعنا، فنحن نعتمد فقط على التبرعات الصغيرة لكي نبقاء مستقلين. إذا لم تكن قد انضممت بعد، اتصل بنا! www.example.org" target="_blank" rel="noopener nofollow">
+                                <i class="fab fa-whatsapp fa-whatsapp-color"></i>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <hr class="tc-hr">
+
+                <p class="py-2 tc-text">This site needs money to keep going and evolving. If you want to donate some, I'm very happy to accept. Right now I didn't make an easy-way to donate. But if you want to give significant money, send me an email and I will contact you right away and give you bank-account info. If you're in Lebanon, we can manage to meetup too.</p>
+                <div class="py-2 tc-text">
+                    <h2>Donor:</h2>
+                    <p>This site needs money to keep going and evolving. If you want to donate some, I'm very happy to accept. Right now I didn't make an easy-way to donate. But if you want to give significant money, send me an email and I will contact you right away and give you bank-account info. If you're in Lebanon, we can manage to meetup too.</p>
+                </div>
+                <div class="py-2 tc-text">
+                    <h2>Investor:</h2>
+                    <p>If you're an Investor, I am currently not accepting funds because I'm still in an early stage. But after winning the first parliament representative, I will be open for a series A/B fund in order to go internationally.</p>
+                </div>
+
+                <footer>
+                    <div class="row text-muted">
+                        <span class="col-6">2002/5/6</span>
+                        <span class="col-6" style="text-align: end;">moe-assal</span>
+                    </div>
+                </footer>
+            </article>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

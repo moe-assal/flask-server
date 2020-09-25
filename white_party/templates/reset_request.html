@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container py-6">
+    <div class="row justify-content-center my-7">
+        <div class="col-12 col-md-8 col-xl-5 pb-2">
+            <div class="card bg-secondary border-0 mb-0">
+                <div class="card-body px-lg-5 py-lg-5">
+
+                    <div class="mb-4 text-center">
+                        <h2>Reset:</h2>
+                    </div>
+
+                    <form role="form" action="#" method="post">
+                        {{ reset_request_form.hidden_tag() }}
+
+                        <div class="form-group mb-3">
+                            <div class="input-group input-group-merge input-group-alternative">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-envelope-open"></i></span>
+                                </div>
+                                {{ reset_request_form.email(class="form-control", **{'placeholder': "Email"}) }}
+                            </div>
+                            {% for error in reset_request_form.email.errors %}
+                                <span class="input-error"> {{error}} </span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="text-center">
+                            {{ reset_request_form.submit(class="btn btn-primary my-4") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
